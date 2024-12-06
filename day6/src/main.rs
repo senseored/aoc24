@@ -1,8 +1,8 @@
 use std::fs;
 
 fn main() {
-    // let file_path = "input/test.txt";
-    let file_path = "input/day6.txt";
+    let file_path = "input/test.txt";
+    // let file_path = "input/day6.txt";
 
     // println!("In file {file_path}");
 
@@ -143,8 +143,8 @@ fn get_result(area: Vec<Vec<char>>) {
             }
         }
     }
-    // for i in 0..area.len() {
-    //     println!("{:?}", area[i]);
-    // }
+    for i in 0..area.len() {
+        println!("{:?}", area[i]);
+    }
     println!("result: {}", result);
 }
