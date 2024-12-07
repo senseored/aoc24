@@ -1,16 +1,17 @@
 use std::fs;
+use std::mem;
 
 #[derive(Clone)]
 struct Area {
-    // area: [[char; 130]; 130],
-    area: Vec<Vec<char>>,
+    area: [[char; 10]; 10],
+    // area: Vec<Vec<char>>,
     loops: i32,
 }
 impl Area {
     fn new() -> Area {
         Area {
-            area: Vec::new(),
-            // area: [['.'; 130]; 130],
+            // area: Vec::new(),
+            area: [['.'; 10]; 10],
             loops: 0,
         }
     }
@@ -21,12 +22,17 @@ impl Area {
         println!("loops: {}", self.loops);
     }
     fn populate(&mut self, contents: &str) {
-        for lines in contents.lines() {
-            let mut line = Vec::new();
-            for char in lines.chars() {
-                line.push(char);
+        // for lines in contents.lines() {
+        //     let mut line = Vec::new();
+        //     for char in lines.chars() {
+        //         line.push(char);
+        //     }
+        //     self.area.push(line);
+        // }
+        for (i, line) in contents.lines().enumerate() {
+            for (j, char) in line.chars().enumerate() {
+                self.area[i][j] = char;
             }
-            self.area.push(line);
         }
     }
     fn print(&self) {
@@ -77,9 +83,7 @@ impl Area {
         result
     }
     fn move_char(&mut self, mut x: usize, mut y: usize, char: char) -> (usize, usize, char) {
-        // area: Vec<Vec<char>>,
-        let mut looparea: Box<Vec<Vec<char>>> = Box::new(Vec::new());
-        looparea = Box::new(self.area.clone());
+        let mut looparea = self.area.clone();
         self.print_loops();
         match char {
             '<' => {
@@ -132,7 +136,8 @@ impl Area {
     }
     fn check_loops(
         &mut self,
-        area: Box<Vec<Vec<char>>>,
+        // area: Vec<Vec<char>>,
+        area: [[char; 10]; 10],
         x: usize,
         y: usize,
         start_x: usize,
@@ -192,21 +197,9 @@ impl Area {
         }
     }
 }
-// impl Drop for Area {
-//     fn drop(&mut self) {
-//         let mut children = mem::replace(&mut self.area, Vec::new());
-//
-//         loop {
-//             children = match children {
-//                 Vec(mut n) => mem::replace(&mut n.borrow_mut().area, Vec::new()),
-//                 // None => break,
-//             }
-//         }
-//     }
-// }
 fn main() {
-    // let file_path = "input/test.txt";
-    let file_path = "input/day6.txt";
+    let file_path = "input/test.txt";
+    // let file_path = "input/day6.txt";
 
     // println!("In file {file_path}");
 
@@ -214,7 +207,7 @@ fn main() {
 
     // println!("{contents}");
 
-    let mut area = Box::new(Area::new()); //Area::new();
+    let mut area = Area::new();
     area.populate(&contents);
     // area.print();
     let (x, y, char) = area.get_position();
