@@ -13,10 +13,14 @@ fn main() {
 
     // let mut map: Vec<char> = Vec::new();
     let mut map: String = String::new();
+    let mut freevec = 0;
     let mut freespace = 0;
     let mut sortmap: String = String::new();
     let mut sortmap_rev: String = String::new();
     let mut i = 0;
+    let mut vecmap: Vec<i8> = Vec::new();
+    let mut sortvecmap: Vec<i8> = Vec::new();
+    let mut revvecmap: Vec<i8> = Vec::new();
 
     // contents.chars().for_each(|c| {
     contents.chars().for_each(|c| {
@@ -30,10 +34,12 @@ fn main() {
         if i % 2 == 0 {
             for _x in 0..c as i8 - 48 {
                 map = format!("{}{}", map, i / 2);
+                vecmap.push(i / 2);
             }
         } else {
             for _x in 0..c as i8 - 48 {
                 map = format!("{}{}", map, ".");
+                vecmap.push(-1);
             }
         }
         i += 1;
@@ -58,6 +64,14 @@ fn main() {
             }
         }
     });
+    sortvecmap = vecmap.clone();
+    // vecmap.iter().for_each(|c| {
+    //     if *c == -1 {
+    //         if revvecmap[revvecmap.len() - 1] != -1 {
+    //             sortvecmap.push(*c);
+    //         }
+    //     }
+    // });
     // map.chars().rev().for_each(|c| {
     //     if c != '.' {
     //         sortmap_rev = format!("{}{}", sortmap_rev, c);
