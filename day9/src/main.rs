@@ -37,6 +37,9 @@ fn main() {
             }
         }
         i += 1;
+        if i == 20 {
+            i = 0;
+        }
     });
     println!("{}, {}", map, map.len());
     sortmap_rev = map.clone();
@@ -73,14 +76,18 @@ fn main() {
     // println!("sortmap: {}", sortmap_rev);
     println!("{}, {}", sortmap, sortmap.len());
     let mut prevchar = 0;
-    let mut mult = 0;
+    let mut mult: i128 = 0;
     let mut sum: i128 = 0;
     let mut count: i128 = 0;
     sortmap.chars().for_each(|c| {
         if c.is_digit(10) {
-            sum += c.to_digit(10).unwrap() as i128 * count;
+            // if prevchar == 9 && c.to_digit(10).unwrap() == 0 {
+            //     mult += 10;
+            // }
+            sum += (c.to_digit(10).unwrap() as i128 + mult) * count;
             // println!("sum: {}, i: {}, c: {}", sum, count, c);
             count += 1;
+            prevchar = c.to_digit(10).unwrap();
         }
     });
     // for (i, c) in sortmap.chars().enumerate() {
@@ -90,7 +97,11 @@ fn main() {
     //     }
     // }
     println!("sum: {}", sum);
+    println!("count: {}", count);
+    println!("sortmap: {}", sortmap.len());
     println!("map len: {}", map.len());
     println!("sortmap+free len: {}", sortmap.len() + freespace);
     println!("orig len: {}", contents.len());
+    //5536110224
+    //89277257350 -- too small
 }
