@@ -120,22 +120,22 @@ fn main() {
     //     }
     //     println!();
     // }
-    for x in 0..width {
-        for y in 0..height {
-            let mut found = false;
-            for antinode2 in &antinodes2 {
-                if antinode2[0] == x as i8 && antinode2[1] == y as i8 {
-                    print!("#");
-                    count += 1;
-                    found = true;
-                }
-            }
-            if !found {
-                print!(".");
-            }
-        }
-        println!();
-    }
+    // for x in 0..width {
+    //     for y in 0..height {
+    //         let mut found = false;
+    //         for antinode2 in &antinodes2 {
+    //             if antinode2[0] == x as i8 && antinode2[1] == y as i8 {
+    //                 print!("#");
+    //                 count += 1;
+    //                 found = true;
+    //             }
+    //         }
+    //         if !found {
+    //             print!(".");
+    //         }
+    //     }
+    //     println!();
+    // }
     println!("antinodes2: {:?}", antinodes2);
     println!("count: {}", count);
 
@@ -146,5 +146,5 @@ fn main() {
             }
         }
     }
-    println!("count: {}", count);
+    println!("dupe check: {}", count);
 }
