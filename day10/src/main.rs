@@ -13,7 +13,7 @@ fn main() {
 
     search(map);
 }
-fn search(map: Vec<Vec<usize>>) {
+fn search(map: Vec<Vec<usize>>) -> (usize, usize) {
     let trailheads = find_trailheads(map.clone());
     let mut sum = 0;
     let mut rating = 0;
@@ -25,6 +25,8 @@ fn search(map: Vec<Vec<usize>>) {
     });
     println!("trailheads: {}", sum);
     println!("rating: {}", rating);
+
+    (sum, rating)
 }
 fn check_route(pos: (usize, usize), map: &Vec<Vec<usize>>) -> Vec<(bool, (usize, usize))> {
     let results: Vec<(bool, (usize, usize))> = Vec::new();
@@ -121,4 +123,20 @@ fn move_pos(mut pos: (usize, usize), width: usize, height: usize, dir: char) -> 
         _ => {}
     };
     pos
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test() {
+        let file_path = "input/test.txt";
+
+        let contents =
+            fs::read_to_string(file_path).expect("Should have been able to read the file");
+
+        let map = populate(&contents);
+
+        assert_eq!(search(map), (36, 81));
+    }
 }
