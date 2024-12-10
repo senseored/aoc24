@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, usize};
 
 fn main() {
     // let file_path = "input/test2.txt";
@@ -10,180 +10,62 @@ fn main() {
     // let contents = "12345";
 
     // println!("{contents}");
-    // println!("len: {}", contents.len());
-
-    // let mut map: Vec<char> = Vec::new();
-    let mut map: String = String::new();
+    let mut valuemap: String = String::new();
+    let mut emptymap: String = String::new();
     let mut freevec = 0;
-    let mut freespace = 0;
-    let mut sortmap: String = String::new();
-    let mut sortmap_rev: String = String::new();
     let mut i = 0;
     let mut vecmap: Vec<i32> = Vec::new();
     let mut vecmap2: Vec<i32> = Vec::new();
     let mut sortvecmap: Vec<i32> = Vec::new();
-    let mut sortvecmap2: Vec<i32> = Vec::new();
-    let mut revvecmap: Vec<i32> = Vec::new();
     let mut maplen: usize = 0;
+    let mut part3: Vec<i32> = Vec::new();
 
-    // contents.chars().for_each(|c| {
     contents.chars().for_each(|c| {
-        // map.push(c);
-        // println!("c: {}, i: {}", c as i8, i);
-        // println!(
-        //     "is numeric: {} - number: {}",
-        //     c.is_numeric(),
-        //     c.to_digit(10).unwrap()
-        // );
         if i % 2 == 0 {
             for _x in 0..c as i8 - 48 {
-                // map = format!("{}{}", map, i / 2);
                 vecmap.push(i / 2);
                 vecmap2.push(i / 2);
             }
         } else {
             for _x in 0..c as i8 - 48 {
-                // map = format!("{}{}", map, ".");
                 vecmap.push(-1);
                 freevec += 1;
             }
         }
-        i += 1;
         if c.is_digit(10) {
             maplen += c.to_digit(10).unwrap() as usize;
         }
-        // if i == 20 {
-        //     i = 0;
-        // }
+        i += 1;
     });
-    // println!("{}, {}", map, map.len());
-    // println!("{:?}", vecmap);
-    sortmap_rev = map.clone();
-    // while sortmap.len() + freespace < map.len() {
-    //     map.chars().for_each(|c| {
-    //         if sortmap.len() + freespace < map.len() {
-    //             if c.is_digit(10) {
-    //                 sortmap = format!("{}{}", sortmap, c);
-    //             } else {
-    //                 sortmap_rev = format!("{}{}", sortmap_rev, c);
-    //                 while sortmap_rev.chars().last().unwrap() == '.' {
-    //                     freespace += 1;
-    //                     sortmap_rev.pop();
-    //                 }
-    //                 sortmap = format!("{}{}", sortmap, sortmap_rev.chars().last().unwrap());
-    //                 sortmap_rev.pop();
-    //             }
-    //         }
-    //     });
-    // }
-    revvecmap = vecmap.clone();
-    println!("{:?}", vecmap);
+    let mut vecmap3 = vecmap2.clone();
+    for (x, c) in contents.chars().enumerate() {
+        if x % 2 == 0 {
+            valuemap = format!("{}{}", valuemap, c);
+        } else {
+            emptymap = format!("{}{}", emptymap, c);
+        }
+    }
     vecmap.iter().for_each(|n| {
-        if sortvecmap2.len() + freevec < vecmap.len() {
+        if sortvecmap.len() + freevec < vecmap.len() {
             if !n.is_negative() {
-                sortvecmap2.push(*n);
+                sortvecmap.push(*n);
             } else {
-                sortvecmap2.push(*vecmap2.last().unwrap());
+                sortvecmap.push(*vecmap2.last().unwrap());
                 vecmap2.pop();
             }
         }
-        // println!(
-        //     "sortvevclen: {}, freevec: {}, vecmaplen, {}",
-        //     sortvecmap.len(),
-        //     freevec,
-        //     vecmap.len()
-        // );
-        // if sortvecmap.len() + freevec < vecmap.len() {
-        //     if !n.is_negative() {
-        //         sortvecmap.push(*n);
-        //     } else {
-        //         revvecmap.push(*n);
-        //         while revvecmap.last().unwrap().is_negative() {
-        //             freevec += 1;
-        //             revvecmap.pop();
-        //         }
-        //         sortvecmap.push(*revvecmap.last().unwrap());
-        //         revvecmap.pop();
-        //     }
-        // println!("n: {}", n);
-        // println!(
-        //     "sortvevclen: {}, freevec: {}, vecmaplen, {}",
-        //     sortvecmap.len(),
-        //     freevec,
-        //     vecmap.len()
-        // );
-        // if *n == -1 {
-        //     // freevec += 1;
-        //     // while revvecmap[revvecmap.len() - 1] != -1 {
-        //     while *revvecmap.last().unwrap() == -1 {
-        //         freevec += 1;
-        //         revvecmap.pop();
-        //     }
-        //     sortvecmap.push(*revvecmap.last().unwrap());
-        //     revvecmap.pop();
-        // } else {
-        //     sortvecmap.push(*n);
-        // }
-        // }
     });
-    sortvecmap2.iter().for_each(|n| {
-        if n.is_negative() {
-            println!("yo i done messed up");
-        }
-    });
-    println!("{:?}", sortvecmap2);
-    // revvecmap.pop();
-    // sortvecmap.push(*revvecmap.last().unwrap());
-    // revvecmap.pop();
-    // println!("{}", revvecmap.last().unwrap());
-    // println!("{:?}, {}", sortvecmap, sortvecmap.len());
-    // map.chars().rev().for_each(|c| {
-    //     if c != '.' {
-    //         sortmap_rev = format!("{}{}", sortmap_rev, c);
-    //     }
-    // });
-    // map.chars().for_each(|c| {
-    //     if c == '.' {
-    //         freespace += 1;
-    //     } else {
-    //         sortmap = format!("{}{}", sortmap, c);
-    //     }
-    // });
-    // for _i in 0..freespace {
-    //     sortmap = format!("{}{}", sortmap, '.');
-    // }
-    // println!("sortmap: {}", sortmap_rev);
-    // println!("{}, {}", sortmap, sortmap.len());
-    let mut prevchar = 0;
-    let mut mult: i128 = 0;
     let mut sum: i128 = 0;
     let mut count2 = 0;
     let mut count: i128 = 0;
-    sortvecmap2.iter().for_each(|n| {
-        // println!("n: {}, sum: {}, count: {}", n, sum, count);
+    sortvecmap.iter().for_each(|n| {
         if count2 < maplen {
             sum += *n as i128 * count;
             count2 += 1;
             count += 1;
         }
     });
-    // sortmap.chars().for_each(|c| {
-    //     if c.is_digit(10) {
-    //         // if prevchar == 9 && c.to_digit(10).unwrap() == 0 {
-    //         //     mult += 10;
-    //         // }
-    //         sum += (c.to_digit(10).unwrap() as i128 + mult) * count;
-    //         // println!("sum: {}, i: {}, c: {}", sum, count, c);
-    //         count += 1;
-    //         prevchar = c.to_digit(10).unwrap();
-    //     }
-    // });
-    // for (i, c) in sortmap.chars().enumerate() {
-    //     if c.is_digit(10) {
-    //         sum += (c.to_digit(10).unwrap() * i as u32) as i128;
-    //         println!("sum: {}, i: {}, c: {}", sum, i, c);
-    //     }
-    // }
+
     println!("sum: {}", sum);
     println!("count: {}", count);
     println!("sortmap: {}", sortvecmap.len());
@@ -191,10 +73,205 @@ fn main() {
     println!("vecmap len: {}", vecmap.len());
     println!("sortmap+free len: {}", sortvecmap.len() + freevec);
     println!("orig len: {}", contents.len());
-    //5536110224
-    //89277257350 -- too small
-    //6283665299144
-    //24071685531123
-    //24071685531123
-    //6283404590840
+
+    // println!("\nvaluemap: {}", valuemap);
+    // println!("emptymap: {}", emptymap);
+    // println!("contents: {}", contents);
+    // println!("vecmap: {:?}", vecmap);
+
+    let mut movecount = 0;
+    let mut something = true;
+    let mut something2 = true;
+    // while something {
+    //     let mut addlist: Vec<usize> = Vec::new();
+    //     let mut remlist: Vec<usize> = Vec::new();
+    //     for (i, n) in vecmap.iter().enumerate() {
+    //         if n.is_negative() {
+    //             addlist.push(i);
+    //             freecount += 1;
+    //         } else {
+    //             let mut lastvalue = vecmap.last().unwrap().clone();
+    //             let mut seqcount = 0;
+    //             let mut vecx = vecmap.len();
+    //             if freecount > 0 {
+    //                 for (x, c) in vecmap.iter().rev().enumerate() {
+    //                     // println!(
+    //                     //     "c: {}, lastvalue: {}, seqcount: {}, freecount: {}",
+    //                     //     c, lastvalue, seqcount, freecount
+    //                     // );
+    //                     if *c == lastvalue && c.is_positive() {
+    //                         seqcount += 1;
+    //                     } else {
+    //                         if seqcount <= freecount && lastvalue > 0 {
+    //                             for _z in 0..seqcount {
+    //                                 freecount -= 1;
+    //                                 if remlist.is_empty() {
+    //                                     remlist.push(vecx - x + seqcount);
+    //                                     seqcount -= 1;
+    //                                 } else if remlist.last().unwrap() > &(vecx - x + seqcount) {
+    //                                     remlist.push(vecx - x + seqcount);
+    //                                     seqcount -= 1;
+    //                                 }
+    //                             }
+    //                         }
+    //                         seqcount = 1;
+    //                     }
+    //                     lastvalue = *c;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     println!("vecmap: {:?}", vecmap);
+    //     println!("addlist: {:?}, remlist: {:?}", addlist, remlist);
+    //     for i in 0..remlist.len() {
+    //         vecmap[addlist[i]] = vecmap[remlist[i] - 1] as i32;
+    //     }
+    //     for n in remlist.iter() {
+    //         vecmap.remove(*n - 1);
+    //     }
+    //     if remlist.is_empty() {
+    //         something = false;
+    //     }
+    // }
+    let mut checked = 0;
+    let mut lastvalue = -1;
+    // let mut lastvalue = vecmap.last().unwrap().clone();
+    while something {
+        let mut lastvalue = -1;
+        let mut addlist: Vec<usize> = Vec::new();
+        let mut remlist: Vec<usize> = Vec::new();
+        let mut movecount = 0;
+        let mut freevec = 0;
+        let mut letsgo = true;
+        for i in checked..vecmap.len() {
+            // addlist = Vec::new();
+            // remlist = Vec::new();
+            if letsgo {
+                let c = vecmap[vecmap.len() - 1 - i];
+                // if c != lastvalue {
+                //     movecount = 0;
+                // }
+                if lastvalue > 0 && c == lastvalue {
+                    movecount += 1;
+                } else {
+                    if lastvalue.is_positive() {
+                        movecount += 1;
+                        let mut leggo = true;
+                        for y in 0..vecmap.len() {
+                            // if y <= vecmap.len() - 1 - i {
+                            if y <= vecmap.len() - checked {
+                                if leggo {
+                                    if vecmap[y].is_negative() {
+                                        freevec += 1;
+                                    } else {
+                                        if movecount > freevec {
+                                            freevec = 0;
+                                        }
+                                        //     println!(
+                                        //     "movecount: {}, freevec: {} lastvalue: {}, index: {}, i: {}, y: {}",
+                                        //     movecount,
+                                        //     freevec,
+                                        //     lastvalue,
+                                        //     vecmap.len() - 1 - i, i, y
+                                        // );
+                                        if freevec >= movecount {
+                                            for z in 0..movecount {
+                                                addlist.push(y - freevec + z);
+                                                remlist.push(vecmap.len() - 1 - i + movecount - z);
+                                                lastvalue = -1;
+                                            }
+                                            // freevec -= movecount;
+                                            movecount = 0;
+                                            freevec = 0;
+                                            leggo = false;
+                                            // } else {
+                                            //     freevec = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        freevec = 0;
+                        movecount = 0;
+                        letsgo = false;
+                    }
+                }
+                lastvalue = c;
+                checked = i;
+            }
+        }
+        // println!("checked: {}", checked);
+        // println!("addlist: {:?}, remlist: {:?}", addlist, remlist);
+        // println!("movecount: {}, lastvalue: {}", movecount, lastvalue);
+        for i in 0..addlist.len() {
+            vecmap[addlist[i]] = vecmap[remlist[i]] as i32;
+            vecmap[remlist[i]] = -1;
+        }
+        // println!("vecmap: {:?}", vecmap);
+        if checked == vecmap.len() - 1 {
+            something = false;
+        }
+    }
+    // for i in 0..remlist.len() {
+    //     vecmap[addlist[i]] = vecmap[remlist[i] - 1] as i32;
+    // }
+    // for n in remlist.iter() {
+    //     vecmap.remove(*n - 1);
+    // }
+    // if remlist.is_empty() {
+    //     something = false;
+    // }
+    // }
+    // vecmap.iter().for_each(|n| {
+    //     if part3.len() + freevec < vecmap.len() {
+    //         if n.is_negative() {
+    //             freecount += 1;
+    //         } else {
+    //             if freecount > 0 {
+    //                 println!("freecount: {}", freecount);
+    //                 let mut seqcount = 0;
+    //                 let mut x = 0;
+    //                 let mut lastvalue = vecmap3.last().unwrap().clone();
+    //                 let mut remlist: Vec<usize> = Vec::new();
+    //                 for c in vecmap3.iter().rev() {
+    //                     println!("c: {}, lastvalue: {}, seqcount: {}", c, lastvalue, seqcount);
+    //                     if *c == lastvalue && c.is_positive() {
+    //                         seqcount += 1;
+    //                     } else {
+    //                         if seqcount <= freecount {
+    //                             for _z in 0..seqcount {
+    //                                 part3.push(lastvalue);
+    //                                 freecount -= 1;
+    //                                 remlist.push(vecmap3.len() - x - 1);
+    //                             }
+    //                             println!("freecount: {}", freecount);
+    //                         }
+    //                         seqcount = 1;
+    //                     }
+    //                     lastvalue = *c;
+    //                     x += 1;
+    //                 }
+    //                 for n in remlist.iter().rev() {
+    //                     vecmap3.remove(*n);
+    //                 }
+    //             }
+    //             freecount = 0;
+    //             part3.push(*n);
+    //         }
+    //     }
+    // });
+    println!("vecmap: {:?}", vecmap);
+    let mut sum: i128 = 0;
+    let mut count2 = 0;
+    let mut count: i128 = 0;
+    vecmap.iter().for_each(|n| {
+        if n.is_positive() {
+            sum += *n as i128 * count;
+        }
+        count += 1;
+    });
+
+    println!("sum: {}", sum);
+    println!("count: {}", count);
+    //6304576012713
 }
