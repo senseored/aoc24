@@ -7,46 +7,27 @@ fn main() {
 
     let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
 
-    println!("{contents}");
+    // println!("{contents}");
 
     let map = populate(&contents);
-    println!("{:?}", map);
+
     search(map);
 }
 fn search(map: Vec<Vec<usize>>) {
-    let width = map[0].len() - 1;
-    let height = map.len() - 1;
     let trailheads = find_trailheads(map.clone());
-    let starts = find_starts(map.clone());
-    println!("{:?}", starts);
-    // println!(
-    //     "LEFT:{:?}\nRIGHT:{:?}\nDOWN:{:?}\nUP:{:?}",
-    //     move_pos(starts[0], width, height, 'L'),
-    //     move_pos(starts[0], width, height, 'R'),
-    //     move_pos(starts[0], width, height, 'D'),
-    //     move_pos(starts[0], width, height, 'U')
-    // );
-    // starts.iter().for_each(|start| {
-    //     let results = check_route(*start, &map);
-    //     // println!("{:?}", results);
-    //     println!("{}", calculate(results));
-    // });
     let mut sum = 0;
     let mut rating = 0;
     trailheads.iter().for_each(|start| {
         let results = check_route(*start, &map);
         rating += results.len();
-        // println!("{:?}", results);
         let score = calculate(results);
         sum += score;
-        println!("{}", score);
     });
     println!("trailheads: {}", sum);
     println!("rating: {}", rating);
 }
 fn check_route(pos: (usize, usize), map: &Vec<Vec<usize>>) -> Vec<(bool, (usize, usize))> {
-    // let mut endlist: Vec<(bool, (usize, usize))> = Vec::new();
-    let mut results: Vec<(bool, (usize, usize))> = Vec::new();
+    let results: Vec<(bool, (usize, usize))> = Vec::new();
     fn recursive(
         mut results: Vec<(bool, (usize, usize))>,
         map: &Vec<Vec<usize>>,
@@ -108,17 +89,6 @@ fn find_trailheads(map: Vec<Vec<usize>>) -> Vec<(usize, usize)> {
     for (x, line) in map.iter().enumerate() {
         for (y, num) in line.iter().enumerate() {
             if *num == 0 {
-                starts.push((x, y));
-            }
-        }
-    }
-    starts
-}
-fn find_starts(map: Vec<Vec<usize>>) -> Vec<(usize, usize)> {
-    let mut starts: Vec<(usize, usize)> = Vec::new();
-    for (x, line) in map.iter().enumerate() {
-        for (y, num) in line.iter().enumerate() {
-            if (x == 0 || y == 0 || x == map.len() - 1 || y == map[0].len() - 1) && *num == 0 {
                 starts.push((x, y));
             }
         }
