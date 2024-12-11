@@ -57,7 +57,7 @@ fn next_stone(stone: u64) -> (u64, Option<u64>) {
         return (1, None);
     }
 
-    if (stone.checked_ilog10().unwrap() + 1) % 2 == 0 {
+    if stone.checked_ilog10().unwrap() % 2 != 0 {
         return split_in_two(stone);
     }
 
