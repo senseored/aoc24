@@ -66,8 +66,7 @@ fn next_stone(stone: u64) -> (u64, Option<u64>) {
 
 fn split_in_two(stone: u64) -> (u64, Option<u64>) {
     let stone_str = stone.to_string();
-    let left = &stone_str[0..stone_str.len() / 2];
-    let right = &stone_str[stone_str.len() / 2..stone_str.len()];
+    let (left, right) = stone_str.split_at(stone_str.len() / 2);
 
     (left.parse().unwrap(), Some(right.parse().unwrap()))
 }
