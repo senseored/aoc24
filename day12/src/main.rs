@@ -1,7 +1,5 @@
-//want to try message handling to keep one state
 use std::collections::HashMap;
 use std::fs;
-use std::sync::mpsc;
 
 #[derive(Clone)]
 struct State {
@@ -64,6 +62,59 @@ impl State {
         } else {
             self.map[x][y + 1]
         };
+
+        let luc = if x == 0 && y == 0 {
+            ' '
+        } else if x == 0 {
+            self.map[x][y - 1]
+        } else if y == 0 {
+            self.map[x - 1][y]
+        } else {
+            self.map[x - 1][y - 1]
+        };
+        let ruc = if x == self.map.len() - 1 && y == 0 {
+            ' '
+        } else if x == self.map.len() - 1 {
+            self.map[x][y - 1]
+        } else if y == 0 {
+            self.map[x + 1][y]
+        } else {
+            self.map[x + 1][y - 1]
+        };
+        let ldc = if x == 0 && y == self.map[x].len() - 1 {
+            ' '
+        } else if x == 0 {
+            self.map[x][y + 1]
+        } else if y == self.map[x].len() - 1 {
+            self.map[x - 1][y]
+        } else {
+            self.map[x - 1][y + 1]
+        };
+        let rdc = if x == self.map.len() - 1 && y == self.map[x].len() - 1 {
+            ' '
+        } else if x == self.map.len() - 1 {
+            self.map[x][y + 1]
+        } else if y == self.map[x].len() - 1 {
+            self.map[x + 1][y]
+        } else {
+            self.map[x + 1][y + 1]
+        };
+        if !self.schecked[x][y] {
+            if (luc != c && uc == c && lc == c) || (luc != c && uc != c && lc != c) {
+                *self.sides.entry(c).or_insert(0) += 1;
+            }
+            if (ruc != c && uc == c && rc == c) || (ruc != c && uc != c && rc != c) {
+                *self.sides.entry(c).or_insert(0) += 1;
+            }
+            if (ldc != c && lc == c && dc == c) || (ldc != c && lc != c && dc != c) {
+                *self.sides.entry(c).or_insert(0) += 1;
+            }
+            if (rdc != c && rc == c && dc == c) || (rdc != c && rc != c && dc != c) {
+                *self.sides.entry(c).or_insert(0) += 1;
+            }
+        }
+        self.add_schecked(x, y);
+
         let (l, r, u, d) = (lc == c, rc == c, uc == c, dc == c);
         if !l {
             *self.fence.entry(c).or_insert(0) += 1
@@ -85,21 +136,21 @@ impl State {
         // println!("{}: x:{},y:{}", c, x, y);
 
         let (l, r, u, d) = self.check_dirs(x, y, c);
-        if !self.schecked[x][y] {
-            if ls && !l {
-                *self.sides.entry(c).or_insert(0) += 1;
-            }
-            if rs && !r {
-                *self.sides.entry(c).or_insert(0) += 1;
-            }
-            if us && !u {
-                *self.sides.entry(c).or_insert(0) += 1;
-            }
-            if ds && !d {
-                *self.sides.entry(c).or_insert(0) += 1;
-            }
-        }
-        self.add_schecked(x, y);
+        // if !self.schecked[x][y] {
+        //     if ls && !l {
+        //         *self.sides.entry(c).or_insert(0) += 1;
+        //     }
+        //     if rs && !r {
+        //         *self.sides.entry(c).or_insert(0) += 1;
+        //     }
+        //     if us && !u {
+        //         *self.sides.entry(c).or_insert(0) += 1;
+        //     }
+        //     if ds && !d {
+        //         *self.sides.entry(c).or_insert(0) += 1;
+        //     }
+        // }
+        // self.add_schecked(x, y);
         if l {
             if !self.checked[x][y - 1] {
                 self.check(x, y - 1, l, r, u, d);
@@ -125,8 +176,8 @@ impl State {
 }
 
 fn main() {
-    let file_path = "input/day12.txt";
-    // let file_path = "input/test.txt";
+    // let file_path = "input/day12.txt";
+    let file_path = "input/test.txt";
 
     // println!("In file {file_path}");
 
@@ -158,7 +209,7 @@ fn main() {
         count += *f as i32;
         sides += *f as i32 * state.sides[&c] as i32;
         cost += *f as i32 * state.plots[&c] as i32;
-        println!("{} - {} * {}", c, state.sides[&c], state.plots[&c]);
+        println!("{} - {} * {}", c, state.plots[&c], state.sides[&c]);
     });
     // state.sides.iter().for_each(|(c, f)| {
     //     sides += *f as i32;
