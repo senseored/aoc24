@@ -125,8 +125,8 @@ impl State {
 }
 
 fn main() {
-    let file_path = "input/test.txt";
-    // let file_path = "input/day12.txt";
+    let file_path = "input/day12.txt";
+    // let file_path = "input/test.txt";
 
     // println!("In file {file_path}");
 
