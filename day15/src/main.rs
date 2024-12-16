@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::fs;
 
 #[derive(Debug, Clone)]
@@ -251,7 +250,6 @@ impl BoardWide {
                         free += 1;
                     }
                 }
-                // println!("free is {}", free);
                 free
             }
             '^' => {
@@ -274,12 +272,6 @@ impl BoardWide {
                         free = 1;
                     }
                 }
-
-                // free = if self.check_vert(c, self.robot.0 - 1, self.robot.1) {
-                //     1
-                // } else {
-                //     0
-                // };
                 free
             }
             'v' => {
@@ -302,11 +294,6 @@ impl BoardWide {
                         free = 1;
                     }
                 }
-                // free = if self.check_vert(c, self.robot.0 + 1, self.robot.1) {
-                //     1
-                // } else {
-                //     0
-                // };
                 free
             }
             _ => 0,
@@ -332,19 +319,6 @@ impl BoardWide {
         } else if !self.boxesl.contains(&(x1, y)) && !self.boxesr.contains(&(x1, y)) {
             return true;
         }
-        // let y1 = if self.boxesr.contains(&(x, y)) {
-        //     y - 1
-        // } else {
-        //     y
-        // };
-        // println!("checking {} {} {} {}", x, y, x1, y1);
-        // if self.walls.contains(&(x1, y1)) || self.walls.contains(&(x1, y1 + 1)) {
-        //     println!("wall at {} {}", x1, y1);
-        //     return false;
-        // } else if !self.boxesl.contains(&(x1, y)) && !self.boxesr.contains(&(x1, y)) {
-        //     return true;
-        // }
-        // self.check_vert(c, x1, y1) && self.check_vert(c, x1, y1 + 1)
         false
     }
     fn move_robot(&mut self, c: char) {
@@ -514,14 +488,10 @@ fn main() {
     // let file_path = "input/test4.txt";
     // let file_path = "input/test3.txt";
     // let file_path = "input/test2.txt";
-    let file_path = "input/test.txt";
+    // let file_path = "input/test.txt";
     let file_path = "input/day15.txt";
 
     let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
-
-    // println!("{}", contents);
-    // let lines: Vec<&str> = contents.split_whitespace().collect();
-    // contents.split_whitespace().for_each(|x| println!("{}", x));
 
     let mut board = Board::new();
     let mut board2 = BoardWide::new();
@@ -555,7 +525,6 @@ fn main() {
     board.height = board.walls.iter().map(|x| x.0).max().unwrap() + 1;
     board2.width = board2.walls.iter().map(|x| x.0).max().unwrap() + 1;
     board2.height = board2.walls.iter().map(|x| x.1).max().unwrap() + 1;
-    // println!("moves: {}", board.moves);
     board.draw_board();
     board.do_moves();
     println!("gps: {}", board.calculate_gps());
@@ -565,68 +534,4 @@ fn main() {
     board2.draw_board();
     board2.count_boxes();
     println!("gps: {}", board2.calculate_gps());
-    //1471436
-    //1458740
-    // println!("width: {}, height: {}", board2.width, board2.height);
-    // board2.draw_board();
-    // board2.move_robot('<');
-    // board2.draw_board();
-    // board2.move_robot('^');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.move_robot('>');
-    // board2.draw_board();
-    // // board2.move_robot('<');
-    // // board2.draw_board();
-    // // board2.move_robot('<');
-    // // board2.draw_board();
-    // // board2.move_robot('<');
-    // // board2.draw_board();
-    // // board2.move_robot('<');
-    // // board2.draw_board();
-    // // board2.move_robot('<');
-    // // board2.draw_board();
-    // // board2.move_robot('<');
-    // // board2.draw_board();
-    // // board.move_robot('>');
-    // // board.draw_board();
-    // board2.move_robot('v');
-    // board2.draw_board();
-    // board2.move_robot('^');
-    // board2.draw_board();
-    // board2.move_robot('v');
-    // board2.draw_board();
-    // board2.move_robot('<');
-    // board2.draw_board();
-    // board2.move_robot('^');
-    // board2.draw_board();
-    // // board.move_robot('<');
-    // board.draw_board();
-    // board.move_robot('v');
-    // board.draw_board();
 }
