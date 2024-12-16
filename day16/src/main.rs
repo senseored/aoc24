@@ -27,6 +27,44 @@ impl Board {
             dirs: HashMap::new(),
         }
     }
+    fn plug_dirs(&self, pos: (usize, usize)) -> bool {
+        let mut x = 0;
+        if !self.walls.contains(&(pos.0, pos.1 - 1)) {
+            x += 1;
+        }
+        if !self.walls.contains(&(pos.0, pos.1 + 1)) {
+            x += 1;
+        }
+        if !self.walls.contains(&(pos.0 - 1, pos.1)) {
+            x += 1;
+        }
+        if !self.walls.contains(&(pos.1 + 1, pos.1)) {
+            x += 1;
+        }
+        x == 1
+    }
+    fn plug_dead_ends(&mut self) {
+        // let mut continue_loop = true;
+        // let mut continue_loop2 = false;
+        // while continue_loop {
+        //     continue_loop2 = false;
+        for x in 1..self.width - 1 {
+            for y in 1..self.height - 1 {
+                if !self.walls.contains(&(x, y)) {
+                    if self.plug_dirs((x, y)) {
+                        if self.end != (x, y) && self.horse != (x, y) {
+                            print!("({}, {})", x, y);
+                            self.walls.push((x, y));
+                            // continue_loop2 = true;
+                        }
+                    }
+                }
+            }
+        }
+        println!();
+        // }
+        // continue_loop = continue_loop2;
+    }
     fn draw_board(&self) {
         for x in 0..self.width {
             for y in 0..self.height {
@@ -56,6 +94,28 @@ impl Board {
             self.dirs.insert(pos, (ll, rr, uu, dd));
             &(ll, rr, uu, dd)
         };
+
+        if !*l && !*r && !*u && *d
+            || !*l && !*r && *u && !*d
+            || !*l && *r && !*u && !*d
+            || *l && !*r && !*u && !*d
+        {
+            if self.end != pos && self.horse != pos {
+                self.walls.push(pos);
+                if *l {
+                    self.walls.push((pos.0, pos.1 - 1));
+                }
+                if *r {
+                    self.walls.push((pos.0, pos.1 + 1));
+                }
+                if *u {
+                    self.walls.push((pos.0 - 1, pos.1));
+                }
+                if *d {
+                    self.walls.push((pos.0 + 1, pos.1));
+                }
+            }
+        }
         (*l, *r, *u, *d)
     }
     fn return_dirs(&self, c: char, (l, r, u, d): (bool, bool, bool, bool)) -> (bool, bool, bool) {
@@ -87,6 +147,11 @@ impl Board {
             return false;
         } else if self.walls.contains(&pos) {
             // println!("wall");
+            self.dirs.remove(&pos);
+            self.dirs.remove(&(pos.0, pos.1 - 1));
+            self.dirs.remove(&(pos.0, pos.1 + 1));
+            self.dirs.remove(&(pos.0 - 1, pos.1));
+            self.dirs.remove(&(pos.0 + 1, pos.1));
             return false;
         }
         if self.prev_results.contains_key(&pos) {
@@ -173,7 +238,7 @@ impl Board {
                 x.push(i);
             }
         });
-        self.print_route(self.route[x[0]].clone());
+        // self.print_route(self.route[x[0]].clone());
         for i in 0..x.len() {
             self.route[x[i]].iter().for_each(|x| {
                 if !tiles.contains(x) {
@@ -182,8 +247,8 @@ impl Board {
             })
         }
         // println!("{:?}", self.route[x[x.len() - 1]]);
-        println!("results: {:?}", result);
-        println!("diff routes: {}", x.len());
+        // println!("results: {:?}", result);
+        // println!("diff routes: {}", x.len());
         println!("results: {:?}, tiles: {}", lowest, tiles.len());
         // println!("results: {}", result.iter().min().unwrap());
     }
@@ -230,7 +295,10 @@ fn main() {
     board.width = board.walls.iter().map(|x| x.0).max().unwrap() + 1;
     board.height = board.walls.iter().map(|x| x.1).max().unwrap() + 1;
     // board.draw_board();
+    // board.plug_dead_ends();
+    // board.draw_board();
     println!("horse: {:?}, end: {:?}", board.horse, board.end);
     board.move_horse('>', board.horse, (0, 0), Vec::new());
+    board.draw_board();
     board.print_results();
 }
