@@ -78,7 +78,9 @@ impl Board {
             history.push(pos);
             self.results.push(results);
             self.route.push(history);
-            println!("results: {}", self.results.len());
+            if self.results.len() % 1000 == 0 {
+                println!("results: {}", self.results.len());
+            }
             return true;
         } else if history.contains(&pos) {
             // println!("visited");
