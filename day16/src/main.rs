@@ -11,7 +11,7 @@ struct Board {
     results: Vec<(i32, i32)>,
     prev_results: HashMap<(usize, usize), i32>,
     route: Vec<Vec<(usize, usize)>>,
-    // dirs: HashMap<(i64, i64), (bool, bool, bool, bool)>,
+    dirs: HashMap<(usize, usize), (bool, bool, bool, bool)>,
 }
 impl Board {
     fn new() -> Board {
@@ -24,6 +24,7 @@ impl Board {
             results: Vec::new(),
             prev_results: HashMap::new(),
             route: Vec::new(),
+            dirs: HashMap::new(),
         }
     }
     fn draw_board(&self) {
@@ -42,23 +43,30 @@ impl Board {
             println!();
         }
     }
-    // fn get_dirs(&mut self, pos: (usize, usize)) -> (bool, bool, bool, bool) {
-    //     let (l, r, u, d) = if self.dirs.contains_key(&(pos.0 as i64, pos.1 as i64)) {
-    //         self.dirs.get(&(pos.0 as i64, pos.1 as i64)).unwrap()
-    //     } else {
-    //         let (ll, rr, uu, dd) = (
-    //             !self.walls.contains(&(pos.0, pos.1 - 1)),
-    //             !self.walls.contains(&(pos.0, pos.1 + 1)),
-    //             !self.walls.contains(&(pos.0 - 1, pos.1)),
-    //             !self.walls.contains(&(pos.0 + 1, pos.1)),
-    //         );
-    //         self.dirs
-    //             .insert((pos.0 as i64, pos.1 as i64), (ll, rr, uu, dd));
-    //         &(ll, rr, uu, dd)
-    //     };
-    //     println!("ok dirs - l:{} r:{} u:{} d:{}", l, r, u, d);
-    //     (*l, *r, *d, *u)
-    // }
+    fn get_dirs(&mut self, pos: (usize, usize)) -> (bool, bool, bool, bool) {
+        let (l, r, u, d) = if self.dirs.contains_key(&pos) {
+            self.dirs.get(&pos).unwrap()
+        } else {
+            let (ll, rr, uu, dd) = (
+                !self.walls.contains(&(pos.0, pos.1 - 1)),
+                !self.walls.contains(&(pos.0, pos.1 + 1)),
+                !self.walls.contains(&(pos.0 - 1, pos.1)),
+                !self.walls.contains(&(pos.0 + 1, pos.1)),
+            );
+            self.dirs.insert(pos, (ll, rr, uu, dd));
+            &(ll, rr, uu, dd)
+        };
+        (*l, *r, *u, *d)
+    }
+    fn return_dirs(&self, c: char, (l, r, u, d): (bool, bool, bool, bool)) -> (bool, bool, bool) {
+        match c {
+            '<' => (l, u, d),
+            '>' => (r, u, d),
+            '^' => (l, r, u),
+            'v' => (l, r, d),
+            _ => (true, true, true),
+        }
+    }
     fn move_horse(
         &mut self,
         c: char,
@@ -137,9 +145,17 @@ impl Board {
             }
             _ => (),
         };
-        self.move_horse(c1, pos1, results1, history.clone());
-        self.move_horse(c2, pos2, results2, history.clone());
-        self.move_horse(c3, pos3, results3, history.clone());
+        let (l, r, u, d) = self.get_dirs(pos);
+        let (a, b, c) = self.return_dirs(c, (l, r, u, d));
+        if a {
+            self.move_horse(c1, pos1, results1, history.clone());
+        }
+        if b {
+            self.move_horse(c2, pos2, results2, history.clone());
+        }
+        if c {
+            self.move_horse(c3, pos3, results3, history.clone());
+        }
         false
     }
     fn print_results(&self) {
