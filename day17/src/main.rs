@@ -175,17 +175,35 @@ fn main() {
     println!("Part 1: {}", computer.output);
 
     computer.print_computer();
-
-    // let mut x: i64 = 35184372089000;
-
-    let mut x: i64 = 0;
+    // let mut x: i64 = 100000000000000;
+    // let mut x: i64 = 4398046500000;
+    // let mut x: i64 = 4398046499990;
+    // let mut x: i64 = 1135902984;
+    // let mut x: i64 = 9087223872;
+    // let mut x: i64 = 72697793112;
+    // let mut x: i64 = 581582344944;
+    // let mut x: u64 = 4652658759568;
+    // let mut x: u64 = 37221270076899;
+    let mut x: u64 = 37221270076544;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 =          ;
+    // let mut x: i64 = 0;
     computer.output = "".to_string();
     let mut res: Vec<String> = Vec::new();
     res.push(computer.start.clone());
 
+    computer.print_computer();
     for i in 1..computer.start.len() {
         res.push(rem_first_and_last(&res[i - 1]).to_string());
     }
+    computer.registers = [0, 0, 0];
     res = res.into_iter().rev().collect();
     println!("{:?}", res);
 
@@ -241,17 +259,35 @@ fn main() {
     // program.chars().for_each(|c| {
     //     computer.pc.push(c as u64 - 0x30);
     // });
-    let mut res: Vec<String> = Vec::new();
-    for i in 0..computer.pc.len() {
-        res.push(computer.pc[computer.pc.len() - 1].to_string());
-        // res.push("".to_string());
-        for x in 0..i {
-            res[x] = format!("{}{}", res[x], computer.pc[computer.pc.len() - i - 1]);
-        }
-        // res.push(computer.pc[computer.pc.len() - i - 1].to_string());
-    }
+
+    // let mut res: Vec<String> = Vec::new();
+    // for i in 0..computer.pc.len() {
+    //     res.push(computer.pc[computer.pc.len() - 1].to_string());
+    //     // res.push("".to_string());
+    //     for x in 0..i {
+    //         res[x] = format!("{}{}", res[x], computer.pc[computer.pc.len() - i - 1]);
+    //     }
+    //     // res.push(computer.pc[computer.pc.len() - i - 1].to_string());
+    // }
     println!("{:?}", res);
     println!("Part 2: {}", 0);
+
+    computer.registers = [x - 1, 0, 0];
+    computer.output = "".to_string();
+
+    res.push(computer.start.clone());
+
+    println!("Part 1: {}", computer.output);
+    println!("{:?}", computer.registers);
+    println!("{:?}", computer.pc);
+    println!("{}", computer.start);
+
+    let mut i = 0;
+    while i < computer.pc.len() {
+        i = computer.run_command(computer.pc[i], i);
+    }
+
+    computer.print_computer();
 }
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
