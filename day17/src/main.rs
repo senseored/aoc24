@@ -272,8 +272,9 @@ fn main() {
     println!("{:?}", res);
     println!("Part 2: {}", 0);
 
-    computer.registers = [x - 1, 0, 0];
+    computer.registers = [x + 3, 0, 0];
     computer.output = "".to_string();
+    computer.print_computer();
 
     res.push(computer.start.clone());
 
