@@ -6,6 +6,7 @@ struct Computer {
     registers: [u64; 3],
     pc: Vec<u64>,
     output: String,
+    start: String,
 }
 impl Computer {
     fn new() -> Self {
@@ -13,6 +14,7 @@ impl Computer {
             registers: [0, 0, 0],
             pc: Vec::new(),
             output: "".to_string(),
+            start: String::new(),
         }
     }
     fn adv(&mut self, i: usize) -> usize {
@@ -122,9 +124,16 @@ impl Computer {
             _ => panic!("Unknown command: {}", c),
         }
     }
+    fn print_computer(&self) {
+        println!("registers: {:?}", self.registers);
+        println!("pc: {:?}", self.pc);
+        println!("start: {}", self.start);
+        println!("output: {}", self.output);
+    }
 }
 fn main() {
     let contents = fs::read_to_string("input/test.txt").unwrap();
+    let contents = fs::read_to_string("input/test2.txt").unwrap();
     let contents = fs::read_to_string("input/day17.txt").unwrap();
     println!("{}", contents);
 
@@ -147,8 +156,8 @@ fn main() {
                 .unwrap();
         }
         if i == 4 {
-            let mut program = line.split("Program: ").collect::<Vec<&str>>()[1].to_string();
-            program = program.split(",").map(|s| s.to_string()).collect();
+            computer.start = line.split("Program: ").collect::<Vec<&str>>()[1].to_string();
+            let program: String = computer.start.split(",").map(|s| s.to_string()).collect();
             program.chars().for_each(|c| {
                 computer.pc.push(c as u64 - 0x30);
             });
@@ -156,6 +165,7 @@ fn main() {
     });
     println!("{:?}", computer.registers);
     println!("{:?}", computer.pc);
+    println!("{}", computer.start);
 
     let mut i = 0;
     while i < computer.pc.len() {
@@ -163,5 +173,89 @@ fn main() {
     }
 
     println!("Part 1: {}", computer.output);
+
+    computer.print_computer();
+
+    // let mut x: i64 = 35184372089000;
+
+    let mut x: i64 = 0;
+    computer.output = "".to_string();
+    let mut res: Vec<String> = Vec::new();
+    res.push(computer.start.clone());
+
+    for i in 1..computer.start.len() {
+        res.push(rem_first_and_last(&res[i - 1]).to_string());
+    }
+    res = res.into_iter().rev().collect();
+    println!("{:?}", res);
+
+    // let n: i32 = -1;
+    // for i in 0..32 {
+    //     (0..32)
+    //         .map(|n| x - 1 >> n)
+    //         .for_each(|n| print!("{}", if n % 2 == 0 { "0" } else { "1" }));
+    //     println!(" - result: {}", n);
+    // }
+
+    for y in 0..res.len() {
+        for i in 0..y {
+            if i % 2 == 0 {
+                while !computer.output.ends_with(res[i].as_str()) {
+                    computer.registers = [x.try_into().unwrap(), 0, 0];
+                    computer.output = "".to_string();
+                    let mut i = 0;
+                    while i < computer.pc.len() {
+                        i = computer.run_command(computer.pc[i], i);
+                    }
+                    x += 1;
+                }
+                // println!("result: {}, res: {}", x - 1, res[i]);
+            }
+        }
+        if y % 2 == 0 {
+            (0..64)
+                .map(|n| x - 1 >> n)
+                .for_each(|n| print!("{}", if n % 2 == 0 { "0" } else { "1" }));
+            println!(" - result: {}, res: {}", x - 1, res[y]);
+        }
+    }
+    // let mut x: i64 = 35184372089000;
+
+    // while computer.output != computer.start {
+    //     // while computer.output != "3,0" {
+    //     // while !computer.output.ends_with("5,0,3,3,0") {
+    //     if x % 10000 == 0 {
+    //         println!("x: {}", x);
+    //     }
+    //     computer.registers = [x.try_into().unwrap(), 0, 0];
+    //     computer.output = "".to_string();
+    //     let mut i = 0;
+    //     while i < computer.pc.len() {
+    //         i = computer.run_command(computer.pc[i], i);
+    //     }
+    //     x += 1;
+    // }
+    // println!("result: {}, output: {}", x - 1, computer.output);
+
+    // let program: String = computer.start.split(",").map(|s| s.to_string()).collect();
+    // program.chars().for_each(|c| {
+    //     computer.pc.push(c as u64 - 0x30);
+    // });
+    let mut res: Vec<String> = Vec::new();
+    for i in 0..computer.pc.len() {
+        res.push(computer.pc[computer.pc.len() - 1].to_string());
+        // res.push("".to_string());
+        for x in 0..i {
+            res[x] = format!("{}{}", res[x], computer.pc[computer.pc.len() - i - 1]);
+        }
+        // res.push(computer.pc[computer.pc.len() - i - 1].to_string());
+    }
+    println!("{:?}", res);
     println!("Part 2: {}", 0);
+}
+fn rem_first_and_last(value: &str) -> &str {
+    let mut chars = value.chars();
+    chars.next();
+    // chars.next_back();
+    chars.as_str()
 }
