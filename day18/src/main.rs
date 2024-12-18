@@ -1,17 +1,15 @@
 use std::collections::VecDeque;
 use std::fs;
 
-fn bfs(grid: &mut [bool], max_bytes: usize, bytes: &[(i32, i32)], size: usize) -> Option<usize> {
-    grid.fill(false);
-
-    for i in 0..max_bytes {
-        grid[bytes[i].1 as usize * (size + 1) + bytes[i].0 as usize] = true;
+fn bfs(map: &mut [bool], drops: usize, walls: &[(i32, i32)], size: usize) -> Option<usize> {
+    map.fill(false);
+    for i in 0..drops {
+        map[walls[i].1 as usize * (size + 1) + walls[i].0 as usize] = true;
     }
-
     let pos = (0, 0, 0);
     let mut queue = VecDeque::new();
     queue.push_back(pos);
-    grid[0] = true;
+    map[0] = true;
 
     while let Some((x, y, steps)) = queue.pop_front() {
         if x == size as i32 && y == size as i32 {
@@ -21,13 +19,12 @@ fn bfs(grid: &mut [bool], max_bytes: usize, bytes: &[(i32, i32)], size: usize) -
             let nx = x + dx;
             let ny = y + dy;
             let si = ny as usize * (size + 1) + nx as usize;
-            if nx >= 0 && ny >= 0 && nx < (size as i32 + 1) && ny < (size as i32 + 1) && !grid[si] {
-                grid[si] = true;
+            if nx >= 0 && ny >= 0 && nx < (size as i32 + 1) && ny < (size as i32 + 1) && !map[si] {
+                map[si] = true;
                 queue.push_back((nx, ny, steps + 1));
             }
         }
     }
-
     None
 }
 
