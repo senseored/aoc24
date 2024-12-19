@@ -1,4 +1,3 @@
-use std::env;
 use std::fs;
 
 fn main() {
@@ -14,49 +13,38 @@ fn main() {
     let mut list1: Vec<i32> = Vec::new();
     let mut list2: Vec<i32> = Vec::new();
 
-    for line in contents.lines() {
-        for (i, number) in line.split_whitespace().enumerate() {
+    contents.lines().for_each(|line| {
+        line.split_whitespace().enumerate().for_each(|(i, number)| {
             if i % 2 == 0 {
                 list1.push(number.parse().unwrap());
             } else {
                 list2.push(number.parse().unwrap());
             }
-        }
-    }
+        })
+    });
     list1.sort();
     list2.sort();
 
     let mut result: Vec<i32> = Vec::new();
 
-    for i in 0..list1.len() {
-        if list1[i] > list2[i] {
-            result.push(list1[i] - list2[i]);
+    list1.iter().zip(list2.iter()).for_each(|(a, b)| {
+        if a > b {
+            result.push(a - b);
         } else {
-            result.push(list2[i] - list1[i]);
+            result.push(b - a);
         }
-    }
+    });
 
-    let mut sum: i32 = 0;
-    for i in 0..result.len() {
-        sum += result[i];
-    }
-    println!("part 1: {sum:?}");
+    println!("part 1: {:?}", result.iter().sum::<i32>());
 
-    let mut list3: Vec<i32> = Vec::new();
+    let mut part2 = 0;
 
-    for i in 0..list1.len() {
-        let mut occurances: i32 = 0;
-        for j in 0..list2.len() {
-            if list2[j] == list1[i] {
-                occurances += 1;
+    list1.iter().for_each(|a| {
+        list2.iter().for_each(|b| {
+            if a == b {
+                part2 += a;
             }
-        }
-        list3.push(occurances * list1[i]);
-    }
-    let mut sum2: i32 = 0;
-    for i in 0..list3.len() {
-        sum2 += list3[i];
-    }
-
-    println!("part 2: {sum2:?}");
+        });
+    });
+    println!("part 2: {:?}", part2);
 }
