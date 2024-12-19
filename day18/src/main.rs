@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 use std::fs;
+use std::time::Instant;
 
 fn bfs(map: &mut [bool], drops: usize, walls: &[(i32, i32)], size: usize) -> Option<usize> {
     map.fill(false);
@@ -33,6 +34,8 @@ fn main() {
     // let drops = 12;
     // let size = 8;
     // let file_path = "input/test2.txt";
+    use std::time::Instant;
+    let now = Instant::now();
     let file_path = "input/day18.txt";
     let drops = 1024;
     let size = 70;
@@ -62,4 +65,6 @@ fn main() {
     }
 
     println!("part2: {},{}", walls[max - 1].0, walls[max - 1].1);
+
+    println!("time: {} microseconds", now.elapsed().as_micros());
 }
