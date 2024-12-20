@@ -1,4 +1,5 @@
-use std::collections::VecDeque;
+use itertools::Itertools;
+use std::collections::{HashMap, VecDeque};
 use std::fs;
 use std::time::Instant;
 
@@ -8,7 +9,9 @@ fn bfs(
     start: (usize, usize),
     end: (usize, usize),
     size: (usize, usize),
-) -> Option<usize> {
+    maxcheat: u32,
+) -> usize {
+    let mut dists = HashMap::new();
     map.fill(false);
     walls.iter().for_each(|w| {
         map[w.1 as usize * (size.0 + 1) + w.0 as usize] = true;
@@ -22,8 +25,13 @@ fn bfs(
     map[0] = true;
 
     while let Some((x, y, steps)) = queue.pop_front() {
+        if dists.contains_key(&(x, y)) {
+            continue;
+        }
+        dists.insert((x, y), steps as u32);
         if x == end.0 as i32 && y == end.1 as i32 {
-            return Some(steps);
+            continue;
+            // return Some(steps);
         }
         for (dx, dy) in [(1, 0), (0, 1), (-1, 0), (0, -1)] {
             let nx = x + dx;
@@ -40,7 +48,18 @@ fn bfs(
             }
         }
     }
-    None
+    let mut score = 0;
+
+    dists
+        .iter()
+        .tuple_combinations()
+        .for_each(|(((x1, y1), s1), ((x2, y2), s2))| {
+            let diff = x1.abs_diff(*x2) + y1.abs_diff(*y2);
+            if diff <= maxcheat && s2.abs_diff(*s1) >= diff + 100 {
+                score += 1;
+            }
+        });
+    score
 }
 
 fn main() {
@@ -72,49 +91,67 @@ fn main() {
             };
         })
     });
-    let mut res: Vec<usize> = Vec::new();
+    // let mut res: Vec<usize> = Vec::new();
 
     let width = walls.iter().map(|x| x.0).max().unwrap();
     let height = walls.iter().map(|x| x.1).max().unwrap();
     let mut map = vec![false; (width as usize + 1) * (height as usize + 1)];
 
-    for x in 1..width {
-        for y in 1..height {
-            if walls.contains(&(x, y)) {
-                let mut cheatwalls = walls.clone();
-                cheatwalls.swap_remove(walls.iter().position(|z| z == &(x, y)).unwrap());
-
-                res.push(
-                    bfs(
-                        &mut map,
-                        &cheatwalls,
-                        start,
-                        end,
-                        (width as usize, height as usize),
-                    )
-                    .unwrap(),
-                );
-
-                // println!("x:{},y:{}", x, y);
-            }
-        }
-    }
+    // for x in 1..width {
+    //     for y in 1..height {
+    //         if walls.contains(&(x, y)) {
+    //             let mut cheatwalls = walls.clone();
+    //             cheatwalls.swap_remove(walls.iter().position(|z| z == &(x, y)).unwrap());
+    //
+    //             res.push(
+    //                 bfs(
+    //                     &mut map,
+    //                     &cheatwalls,
+    //                     start,
+    //                     end,
+    //                     (width as usize, height as usize),
+    //                 )
+    //                 .unwrap(),
+    //             );
+    //
+    //             // println!("x:{},y:{}", x, y);
+    //         }
+    //     }
+    // }
 
     println!(
         "original time: {}, width: {}, height: {}",
         pathlen, width, height
     );
 
-    let mut goodcheats = 0;
-    res.iter().for_each(|x| {
-        if *x < pathlen {
-            // println!("{}", pathlen - x);
-            if pathlen - x >= 100 {
-                goodcheats += 1;
-            }
-        }
-    });
-    println!("res: {}", goodcheats);
+    let score = bfs(
+        &mut map,
+        &walls,
+        start,
+        end,
+        (width as usize, height as usize),
+        2,
+    );
+    println!("part 1: {}", score);
+    let score = bfs(
+        &mut map,
+        &walls,
+        start,
+        end,
+        (width as usize, height as usize),
+        20,
+    );
+    println!("part 2: {}", score);
+    // let mut goodcheats = 0;
+    // res.iter().for_each(|x| {
+    //     if *x < pathlen {
+    //         // println!("{}", pathlen - x);
+    //         if pathlen - x >= 100 {
+    //             goodcheats += 1;
+    //         }
+    //     }
+    // });
+    // println!("res: {}", goodcheats);
 
     println!("time: {} microseconds", now.elapsed().as_micros());
 }
