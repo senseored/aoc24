@@ -13,32 +13,30 @@ fn main() {
     let mut correct_p2: Vec<bool> = Vec::new();
     let mut sum = 0;
     let mut targets = Vec::new();
-    for (i, lines) in contents.lines().enumerate() {
-        correct.push(false);
-        correct_p2.push(false);
+    contents.lines().for_each(|lines| {
         let mut line = lines.split(':');
-        let target: i64 = line.next().map(|s| s.parse().unwrap()).unwrap();
-        targets.push(target);
+        targets.push(line.next().map(|s| s.parse().unwrap()).unwrap());
         let numbers: Vec<i64> = line
             .next()
             .map(|ss| ss.split_whitespace().map(|s| s.parse::<i64>().unwrap()))
             .unwrap()
             .collect();
-        correct[i] = calculate(target, &numbers);
-        correct_p2[i] = calculate_p2(target, &numbers);
-    }
-    for i in 0..correct.len() {
-        if correct[i] {
+        correct.push(calculate(*targets.last().unwrap(), &numbers));
+        correct_p2.push(calculate_p2(*targets.last().unwrap(), &numbers));
+    });
+    correct.iter().enumerate().for_each(|(i, c)| {
+        if *c {
             sum += targets[i];
         }
-    }
+    });
     println!("part 1: {}", sum);
+
     sum = 0;
-    for i in 0..correct_p2.len() {
-        if correct_p2[i] {
+    correct_p2.iter().enumerate().for_each(|(i, c)| {
+        if *c {
             sum += targets[i];
         }
-    }
+    });
     println!("part 2: {}", sum);
 }
 

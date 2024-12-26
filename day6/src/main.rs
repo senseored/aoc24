@@ -21,18 +21,28 @@ impl Area {
         println!("loops: {}", self.loops);
     }
     fn populate(&mut self, contents: &str) {
-        for lines in contents.lines() {
+        contents.lines().for_each(|lines| {
             let mut line = Vec::new();
-            for char in lines.chars() {
+            lines.chars().for_each(|char| {
                 line.push(char);
-            }
+            });
             self.area.push(line);
-        }
+        });
+        // for lines in contents.lines() {
+        //     let mut line = Vec::new();
+        //     for char in lines.chars() {
+        //         line.push(char);
+        //     }
+        //     self.area.push(line);
+        // }
     }
     fn print(&self) {
-        for i in 0..self.area.len() {
-            println!("{:?}", self.area[i]);
-        }
+        self.area.clone().into_iter().for_each(|line| {
+            println!("{:?}", line);
+        });
+        // for i in 0..self.area.len() {
+        //     println!("{:?}", self.area[i]);
+        // }
     }
     fn get_position(&self) -> (usize, usize, char) {
         for y in 0..self.area.len() {
