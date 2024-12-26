@@ -64,7 +64,6 @@ fn bfs(
 
 fn main() {
     let file_path = "input/test.txt";
-    use std::time::Instant;
     let now = Instant::now();
     let file_path = "input/day20.txt";
 

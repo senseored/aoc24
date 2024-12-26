@@ -1,0 +1,59 @@
+_^A
+<v>
+
+
+
+
+<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A
+<<vA>>^A<A>AvA<^AA>A<vAAA>^A
+v<<A>>^A<A>AvA<^AA>A<vAAA>^A
+
+
+
+<A^A>^^AvvvA
+<A^A>^^AvvvA
+
+
+029A
+
+
+
+
+door: 341A
+score: 72, multiplier: 341
+door: 480A
+score: 73, multiplier: 480
+door: 286A
+score: 72, multiplier: 286
+door: 579A
+score: 72, multiplier: 579
+door: 149A
+score: 75, multiplier: 149
+total score: 133047
+
+door: 341A
+score: 72, multiplier: 341
+door: 480A
+score: 74, multiplier: 480
+door: 286A
+score: 72, multiplier: 286
+door: 579A
+score: 72, multiplier: 579
+door: 149A
+score: 76, multiplier: 149
+total score: 133676
+
+133676
+
+132532
+
+
+133047-132532=515
+
+133676
+-
+132532
+=
+1144
+
+
