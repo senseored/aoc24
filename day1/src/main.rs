@@ -28,11 +28,7 @@ fn main() {
     let mut result: Vec<i32> = Vec::new();
 
     list1.iter().zip(list2.iter()).for_each(|(a, b)| {
-        if a > b {
-            result.push(a - b);
-        } else {
-            result.push(b - a);
-        }
+        result.push((a - b).abs());
     });
 
     println!("part 1: {:?}", result.iter().sum::<i32>());

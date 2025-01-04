@@ -10,15 +10,13 @@ fn main() {
     println!("total lines: {}", contents.lines().count());
     println!("{}", contents);
 
-    for line in contents.lines() {
-        // println!("{}", line);
-        let mut incdec: bool = false;
-        let mut safe: bool = true;
+    contents.lines().for_each(|line| {
+        let (mut incdec, mut safe) = (false, true);
         let mut seq: Vec<i32> = Vec::new();
-        for number in line.split_whitespace() {
+        line.split_whitespace().for_each(|number| {
             seq.push(number.parse().unwrap());
-        }
-        for (i, _number) in seq.iter().enumerate() {
+        });
+        seq.iter().enumerate().for_each(|(i, _)| {
             let difference: i32;
             if i > 0 {
                 difference = seq[i] - seq[i - 1];
@@ -32,45 +30,40 @@ fn main() {
                     safe = false;
                 }
             }
-        }
-        // println!("{:?}", seq);
-        // println!("{} - {}", line, safe);
+        });
         if safe {
-            sum = sum + 1;
+            sum += 1;
         }
-    }
+    });
 
     println!("safe test 1: {}", sum);
 
     sum = 0;
 
-    for line in contents.lines() {
+    contents.lines().for_each(|line| {
         let mut seq: Vec<i32> = Vec::new();
         let mut safe = false;
-        for number in line.split_whitespace() {
+        line.split_whitespace().for_each(|number| {
             seq.push(number.parse().unwrap());
-        }
-        for (i, _number) in seq.iter().enumerate() {
+        });
+        seq.iter().enumerate().for_each(|(i, _)| {
             let mut seq2 = seq.clone();
             seq2.remove(i);
-            if is_safe(seq.clone()) {
-                safe = true;
-            } else if is_safe(seq2.clone()) {
+            if is_safe(seq.clone()) || is_safe(seq2.clone()) {
                 safe = true;
             }
-        }
+        });
         if safe {
-            sum = sum + 1;
+            sum += 1;
         }
-    }
+    });
 
     println!("safe test 2: {}", sum);
 }
 
 fn is_safe(seq: Vec<i32>) -> bool {
-    let mut incdec: bool = false;
-    let mut safe: bool = true;
-    for (i, _number) in seq.iter().enumerate() {
+    let (mut incdec, mut safe) = (false, true);
+    seq.iter().enumerate().for_each(|(i, _)| {
         let difference: i32;
         if i > 0 {
             difference = seq[i] - seq[i - 1];
@@ -84,6 +77,6 @@ fn is_safe(seq: Vec<i32>) -> bool {
                 safe = false;
             }
         }
-    }
+    });
     safe
 }
