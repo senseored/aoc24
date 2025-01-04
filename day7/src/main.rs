@@ -56,7 +56,7 @@ fn calculate(target: i64, numbers: &[i64]) -> bool {
         }
         false
     }
-    recursive(target, numbers[0] as i64, &numbers[1..] as &[i64])
+    recursive(target, numbers[0], &numbers[1..] as &[i64])
 }
 
 fn calculate_p2(target: i64, numbers: &[i64]) -> bool {
@@ -82,5 +82,5 @@ fn calculate_p2(target: i64, numbers: &[i64]) -> bool {
         }
         false
     }
-    recursive(target, numbers[0] as i64, &numbers[1..] as &[i64])
+    recursive(target, numbers[0], &numbers[1..] as &[i64])
 }
