@@ -88,8 +88,8 @@ impl Area {
     }
     fn move_char(&mut self, mut x: usize, mut y: usize, char: char) -> (usize, usize, char) {
         // area: Vec<Vec<char>>,
-        let mut looparea: Box<Vec<Vec<char>>> = Box::new(Vec::new());
-        looparea = Box::new(self.area.clone());
+        let mut looparea: Box<Vec<Vec<char>>> = Box::default();
+        // looparea = Box::new(self.area.clone());
         self.print_loops();
         match char {
             '<' => {
