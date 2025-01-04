@@ -10,38 +10,30 @@ fn main() {
 
     let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
 
-    println!("{contents}");
+    // println!("{contents}");
 
     let mut sum = 0;
     let mut seq: Vec<Vec<char>> = Vec::new();
 
-    let mut width = 0;
-    let mut height = 0;
-
-    for lines in contents.lines() {
-        let mut line = Vec::new();
-        for char in lines.chars() {
-            line.push(char);
-            if height == 0 {
-                width += 1;
-            }
+    contents.lines().for_each(|line| {
+        let mut l = Vec::new();
+        for char in line.chars() {
+            l.push(char);
         }
-        seq.push(line);
-        height += 1;
-    }
+        seq.push(l);
+    });
+    let (width, height) = (seq.len(), seq[0].len());
 
     for y in 0..height {
         for x in 0..width {
             if seq[y][x] == 'X' {
                 //horizontal ->
-                if x < width - 3 {
-                    if check_letter(seq.clone(), x + 1, y, 'M') {
-                        if check_letter(seq.clone(), x + 2, y, 'A') {
-                            if check_letter(seq.clone(), x + 3, y, 'S') {
-                                sum += 1;
-                            }
-                        }
-                    }
+                if x < width - 3
+                    && check_letter(seq.clone(), x + 1, y, 'M')
+                    && check_letter(seq.clone(), x + 2, y, 'A')
+                    && check_letter(seq.clone(), x + 3, y, 'S')
+                {
+                    sum += 1;
                 }
                 //horizontal <-
                 if x > 2 {
@@ -122,10 +114,8 @@ fn main() {
     sum = 0;
     for y in 1..height - 1 {
         for x in 1..width - 1 {
-            if seq[y][x] == 'A' {
-                if mas_check(seq.clone(), x, y) {
-                    sum += 1;
-                }
+            if seq[y][x] == 'A' && mas_check(seq.clone(), x, y) {
+                sum += 1;
             }
         }
     }
@@ -140,11 +130,11 @@ fn mas_check(seq: Vec<Vec<char>>, x: usize, y: usize) -> bool {
     {
         return true;
     }
-    return false;
+    false
 }
 fn check_letter(seq: Vec<Vec<char>>, x: usize, y: usize, char: char) -> bool {
     if seq[y][x] == char {
         return true;
     }
-    return false;
+    false
 }
