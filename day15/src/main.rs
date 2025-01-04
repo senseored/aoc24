@@ -265,12 +265,11 @@ impl BoardWide {
                     {
                         free = 1;
                     }
-                } else if self.boxesr.contains(&(self.robot.0 - 1, self.robot.1)) {
-                    if self.check_vert(c, self.robot.0 - 1, self.robot.1)
-                        && self.check_vert(c, self.robot.0 - 1, self.robot.1 - 1)
-                    {
-                        free = 1;
-                    }
+                } else if self.boxesr.contains(&(self.robot.0 - 1, self.robot.1))
+                    && self.check_vert(c, self.robot.0 - 1, self.robot.1)
+                    && self.check_vert(c, self.robot.0 - 1, self.robot.1 - 1)
+                {
+                    free = 1;
                 }
                 free
             }
@@ -287,12 +286,11 @@ impl BoardWide {
                     {
                         free = 1;
                     }
-                } else if self.boxesr.contains(&(self.robot.0 + 1, self.robot.1)) {
-                    if self.check_vert(c, self.robot.0 + 1, self.robot.1)
-                        && self.check_vert(c, self.robot.0 + 1, self.robot.1 - 1)
-                    {
-                        free = 1;
-                    }
+                } else if self.boxesr.contains(&(self.robot.0 + 1, self.robot.1))
+                    && self.check_vert(c, self.robot.0 + 1, self.robot.1)
+                    && self.check_vert(c, self.robot.0 + 1, self.robot.1 - 1)
+                {
+                    free = 1;
                 }
                 free
             }
@@ -500,18 +498,18 @@ fn main() {
         for (y, c) in line.chars().enumerate() {
             match c {
                 '#' => {
-                    board.walls.push((x as usize, y as usize));
-                    board2.walls.push((x as usize, y * 2 as usize));
-                    board2.walls.push((x as usize, y * 2 + 1 as usize));
+                    board.walls.push((x, y));
+                    board2.walls.push((x, y * 2));
+                    board2.walls.push((x, y * 2 + 1));
                 }
                 '@' => {
-                    board.robot = (x as usize, y as usize);
-                    board2.robot = (x as usize, y * 2 as usize);
+                    board.robot = (x, y);
+                    board2.robot = (x, y * 2);
                 }
                 'O' => {
-                    board.boxes.push((x as usize, y as usize));
-                    board2.boxesl.push((x as usize, y * 2 as usize));
-                    board2.boxesr.push((x as usize, y * 2 + 1 as usize));
+                    board.boxes.push((x, y));
+                    board2.boxesl.push((x, y * 2));
+                    board2.boxesr.push((x, y * 2 + 1));
                 }
                 '<' | '>' | '^' | 'v' => {
                     board.moves.push(c);

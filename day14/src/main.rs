@@ -65,24 +65,24 @@ struct Robot {
 fn get_next_pos(pos: (i64, i64), vel: (i64, i64), width: i64, height: i64) -> (i64, i64) {
     let (mut x, mut y) = (pos.0 + vel.0, pos.1 + vel.1);
     if x < 0 {
-        x = width + x;
+        x += width;
     }
     if x >= width {
-        x = x - width;
+        x -= width;
     }
     if y < 0 {
-        y = height + y;
+        y += height;
     }
     if y >= height {
-        y = y - height;
+        y -= height;
     }
     (x, y)
 }
 
 // assume xmas tree has top middle and bottom middle
 fn print_map(robots: Vec<Robot>, width: i64, height: i64, count: usize) {
-    let (mut top, mut bottom, mut bleft, mut bright) = (false, false, false, false);
-    let (mut left, mut right) = (0, 0);
+    // let (mut top, mut bottom, mut bleft, mut bright) = (false, false, false, false);
+    // let (left, right) = (0, 0);
     if count % 100000 == 0 {
         println!("count: {}", count);
     }
@@ -149,6 +149,6 @@ fn print_map(robots: Vec<Robot>, width: i64, height: i64, count: usize) {
         //     println!("");
         // }
         println!("count: {}", count + 1);
-        std::io::stdin().read_line(&mut String::new());
+        let _ = std::io::stdin().read_line(&mut String::new());
     }
 }

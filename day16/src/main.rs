@@ -27,44 +27,44 @@ impl Board {
             dirs: HashMap::new(),
         }
     }
-    fn plug_dirs(&self, pos: (usize, usize)) -> bool {
-        let mut x = 0;
-        if !self.walls.contains(&(pos.0, pos.1 - 1)) {
-            x += 1;
-        }
-        if !self.walls.contains(&(pos.0, pos.1 + 1)) {
-            x += 1;
-        }
-        if !self.walls.contains(&(pos.0 - 1, pos.1)) {
-            x += 1;
-        }
-        if !self.walls.contains(&(pos.1 + 1, pos.1)) {
-            x += 1;
-        }
-        x == 1
-    }
-    fn plug_dead_ends(&mut self) {
-        // let mut continue_loop = true;
-        // let mut continue_loop2 = false;
-        // while continue_loop {
-        //     continue_loop2 = false;
-        for x in 1..self.width - 1 {
-            for y in 1..self.height - 1 {
-                if !self.walls.contains(&(x, y)) {
-                    if self.plug_dirs((x, y)) {
-                        if self.end != (x, y) && self.horse != (x, y) {
-                            print!("({}, {})", x, y);
-                            self.walls.push((x, y));
-                            // continue_loop2 = true;
-                        }
-                    }
-                }
-            }
-        }
-        println!();
-        // }
-        // continue_loop = continue_loop2;
-    }
+    // fn plug_dirs(&self, pos: (usize, usize)) -> bool {
+    //     let mut x = 0;
+    //     if !self.walls.contains(&(pos.0, pos.1 - 1)) {
+    //         x += 1;
+    //     }
+    //     if !self.walls.contains(&(pos.0, pos.1 + 1)) {
+    //         x += 1;
+    //     }
+    //     if !self.walls.contains(&(pos.0 - 1, pos.1)) {
+    //         x += 1;
+    //     }
+    //     if !self.walls.contains(&(pos.1 + 1, pos.1)) {
+    //         x += 1;
+    //     }
+    //     x == 1
+    // }
+    // fn plug_dead_ends(&mut self) {
+    //     // let mut continue_loop = true;
+    //     // let mut continue_loop2 = false;
+    //     // while continue_loop {
+    //     //     continue_loop2 = false;
+    //     for x in 1..self.width - 1 {
+    //         for y in 1..self.height - 1 {
+    //             if !self.walls.contains(&(x, y)) {
+    //                 if self.plug_dirs((x, y)) {
+    //                     if self.end != (x, y) && self.horse != (x, y) {
+    //                         print!("({}, {})", x, y);
+    //                         self.walls.push((x, y));
+    //                         // continue_loop2 = true;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     println!();
+    //     // }
+    //     // continue_loop = continue_loop2;
+    // }
     fn draw_board(&self) {
         for x in 0..self.width {
             for y in 0..self.height {
