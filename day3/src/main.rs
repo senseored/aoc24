@@ -11,7 +11,6 @@ fn main() {
     let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
 
     // println!("{contents}");
-    let mut sum: i32 = 0;
 
     let mut seq: Vec<String> = Vec::new();
 
@@ -21,7 +20,7 @@ fn main() {
     }
     seq.remove(0);
 
-    sum = calcsum(seq.clone());
+    let mut sum = calcsum(seq.clone());
 
     println!("sum1: {}", sum);
 
@@ -30,29 +29,21 @@ fn main() {
     let mut seq3: Vec<String> = Vec::new();
     let mut seq4: Vec<String> = Vec::new();
 
-    for numbers in contents.split("do") {
+    contents.split("do").for_each(|numbers| {
         seq2.push(numbers.to_string());
-        println!("{}", numbers);
-    }
-    for i in 0..seq2.len() {
-        if i == 0 || seq2[i].starts_with("()") {
-            println!("{}", seq2[i]);
-            seq3.push(seq2[i].to_string());
+    });
+    seq2.iter().enumerate().for_each(|(i, s)| {
+        if i == 0 || s.starts_with("()") {
+            seq3.push(s.to_string());
         }
-    }
-
-    for i in 0..seq3.len() {
-        for numbers in seq3[i].split("mul(") {
-            // println!("{}", numbers);
-            seq4.push(numbers.to_string());
-        }
-    }
+    });
+    seq3.iter().for_each(|s| {
+        s.split("mul(").for_each(|n| {
+            seq4.push(n.to_string());
+        });
+    });
 
     sum = calcsum(seq4);
-    // for numbers in contents.split("do") {
-    //     // println!("{}", numbers);
-    //     // seq.push(numbers.to_string());
-    // }
 
     println!("sum2: {}", sum);
 }
@@ -61,53 +52,46 @@ fn calcsum(seq: Vec<String>) -> i32 {
     let mut sum: i32 = 0;
 
     let mut seq2: Vec<String> = Vec::new();
-    for i in 0..seq.len() {
-        for numbers in seq[i].split(")") {
-            // println!("{}", numbers);
-            seq2.push(numbers.to_string());
-        }
-    }
-    let mut seq3: Vec<String> = Vec::new();
-    for i in 0..seq2.len() {
-        for (j, char) in seq2[i].chars().enumerate() {
-            if j == 0 {
-                if char.is_numeric() {
-                    seq3.push(seq2[i].to_string());
-                    // println!("{}", seq2[i]);
-                }
-            }
-        }
-    }
+    seq.iter().for_each(|s| {
+        s.split(")").for_each(|n| {
+            seq2.push(n.to_string());
+        });
+    });
 
-    // println!("{:?}", seq3);
+    let mut seq3: Vec<String> = Vec::new();
+    seq2.iter().for_each(|s| {
+        s.chars().enumerate().for_each(|(i, c)| {
+            if i == 0 && c.is_numeric() {
+                seq3.push(s.to_string());
+            }
+        });
+    });
 
     let mut seq4: Vec<String> = Vec::new();
-
-    for i in 0..seq3.len() {
+    seq3.iter().for_each(|s| {
         let mut check = true;
-        for char in seq3[i].chars() {
-            if !char.is_numeric() && char != ',' {
+        s.chars().for_each(|c| {
+            if !c.is_numeric() && c != ',' {
                 check = false;
             }
-        }
+        });
         if check {
-            // println!("{}", seq3[i]);
-            seq4.push(seq3[i].to_string());
+            seq4.push(s.to_string());
         }
-    }
+    });
 
-    for i in 0..seq4.len() {
+    seq4.iter().for_each(|s| {
         let mut num1: i32 = 0;
         let mut num2: i32 = 0;
-        for (j, numbers) in seq4[i].split(",").enumerate() {
-            if j == 0 {
-                num1 = numbers.parse::<i32>().unwrap();
-            } else if j == 1 {
-                num2 = numbers.parse::<i32>().unwrap();
+        s.split(",").for_each(|n| {
+            if num1 == 0 {
+                num1 = n.parse().unwrap();
+            } else if num2 == 0 {
+                num2 = n.parse().unwrap();
             }
-        }
+        });
         sum += num1 * num2;
-    }
+    });
 
-    return sum;
+    sum
 }
